@@ -1,0 +1,13 @@
+{
+  "name": "fullstack-cheatsheet",
+  "version": "1.0.0",
+  "description": "some stuff",
+  "main": "index.js",
+  "scripts": {
+    "run:first": "node JavaScript/first.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
