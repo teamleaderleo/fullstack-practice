@@ -332,3 +332,45 @@ T: Makes sense. Maybe it's just about familiarity -- this is readable once you�
 
 C: That’s exactly right. Once your mental model clicks, this becomes a kind of muscle memory -- but the first few times? Yeah, totally awkward.
 */
+
+// ========================================
+// Q5: Flatten -- Get all events across days
+// ========================================
+
+const trip = {
+  days: [
+    { events: ['Museum', 'Cafe'] },
+    { events: ['Hike', 'Beach'] },
+  ],
+};
+
+const allEvents = trip.days.flatMap(day => day.events);
+console.log('All events:', allEvents);
+
+/*
+-- My Notes --
+T: Okay, now *this* is the actual flattening. We’re using `.flatMap()` to kind of decompile or "unwrap" this nested structure.
+So `trip.days` is an array of objects, each of which has an `events` array, and we want one flat list of all those events.
+
+C: Spot on. This is what `.flatMap()` is for -- you map each item into a sub-array and then it immediately flattens one level.
+
+T: There’s a lot of *implicit structure* here. Like, we’re passing in an arrow function again -- those things are everywhere now.
+When did those even get introduced? This feels like a really idiomatic and modern way to write JS. If you learned pre-ES6,
+this would’ve felt like a massive shift.
+
+C: You're right -- arrow functions came in with **ES6 (2015)** and totally changed the vibe of JavaScript.
+At the time, people *did* clutch pearls -- especially because arrow functions also change how `this` works,
+and they break old patterns people were used to. But now they’re absolutely idiomatic and expected.
+
+T: This one doesn’t feel too bad, honestly. It’s kind of elegant once you break it down. But I can imagine if I didn’t know
+what `.flatMap()` was, I’d be like... what *magic* is happening here?
+
+C: That’s a common reaction. `.flatMap()` is basically shorthand for:
+```js
+trip.days.map(day => day.events).flat();
+```
+So if you’re more familiar with .map() and .flat() individually, it’s easy to understand once you realize
+they’re just chained together into one convenient method.
+
+T: Makes sense. I like this one.
+*/
