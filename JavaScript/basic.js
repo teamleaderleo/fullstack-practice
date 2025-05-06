@@ -229,3 +229,53 @@ T: Right, I guess that's why constructors and methods in Go don't lean into this
 C: Exactly. So when you come back to JS, arrow functions feel ergonomic in a way that many languages avoid --
 they reduce boilerplate, dodge binding hell, and let you express intent quickly.
 */
+
+// ========================================
+// Q3: Reduce -- Count how many visited
+// ========================================
+
+const countVisited = places.reduce((count, place) =>
+  place.visited ? count + 1 : count, 0);
+console.log('Count of visited places:', countVisited);
+
+/*
+-- My Notes --
+T: Okay, so here we’re counting how many places were visited using `.reduce()`.
+
+We pass in two parameters: `count` and `place`. `count` is the accumulator and starts at 0 (that’s the second argument). 
+
+Now, this part is interesting: `place.visited ? count + 1 : count` -- that’s the ternary operator, right? 
+It’s like a shortcut for an if/else. But the symbolism here is a bit... unintuitive? 
+It makes sense if you know what you're looking at, but I feel like it might trip you up if you read left to right too literally.
+
+Would this be easier to read if you were used to reading right to left? Like, would someone used to Hebrew or Japanese
+pick this up more intuitively?
+
+C: That’s a fascinating thought -- the ternary syntax definitely benefits from **pattern familiarity** over semantic clarity.
+It’s more “visual idiom” than logical structure. Once you’ve seen it a few times, it’s very compact,
+but yeah -- it’s not *inherently* readable.
+
+T: Also, in Python, I feel like I’d probably just use a sum and a generator expression: 
+`sum(1 for p in places if p["visited"])`. It’s very declarative. But here, we’re going lower-level, in a sense.
+
+C: Exactly -- Python's syntax leans toward concise *expressions* (like comprehensions), while JS often pushes you 
+toward using functional primitives like `.reduce()` to achieve the same thing.
+
+T: And with raw JavaScript, we don’t know what the types are. Is `countVisited` going to be a number? Probably? 
+But in TypeScript, you’d be able to annotate this -- maybe explicitly say `reduce<number>` or something.
+
+C: Right -- in TypeScript, you could write:
+```ts
+const countVisited = places.reduce<number>((count, place) => 
+  place.visited ? count + 1 : count, 0);
+```
+That helps the compiler (and your teammates) know exactly what you're expecting.
+But JS is more trusting -- which is both freeing and risky.
+
+T: Yeah, like in Python you might use a defaultdict, or just track things casually.
+In JS, it feels like you’re juggling a few assumptions unless you lock it down with TS.
+
+C: That’s the eternal tension between flexibility and safety -- TypeScript gives you scaffolding,
+but pure JS lets you move fast. You’ll pick the tool depending on context, especially in companies where 
+data shape consistency is everything.
+*/
