@@ -165,7 +165,7 @@ console.log('Place map:', placeMap);
 T: Okay, so we’re creating an object that maps IDs to place objects.
 But this is... kind of awkward? Like what is this `{}` thing at the end of `.reduce()`?
 
-C: That’s the **initial value** for the --ulator — in this case, an empty object.
+C: That’s the **initial value** for the --ulator -- in this case, an empty object.
 Every time you use `.reduce()`, you can (and often should) pass in a starting value.
 Here, it’s the object that will eventually hold all the ID-place mappings.
 
@@ -175,14 +175,60 @@ C: Exactly. We're building a new object where the keys are place IDs and the val
 This is basically how you'd build a dictionary in Python.
 
 T: So `acc[place.id] = place` is like saying: add this key-value pair to our result object.
-C: Yup — same as `dict[key] = value` in Python.
+C: Yup -- same as `dict[key] = value` in Python.
 
 T: Okay, and the final `return acc` at the end makes sure we keep passing along the updated object.
-That --ulator is doing a LOT of work — in other examples it was an array, now it’s an object.
+That --ulator is doing a LOT of work -- in other examples it was an array, now it’s an object.
 In TypeScript, this could be any number of types: an array, a map, a string --ulator, etc.
-C: Right — `.reduce()` is super flexible, but the **shape of the --ulator** entirely depends on the context and your starting value.
-You can use it to build arrays, objects, strings, numbers, whatever — as long as you're consistent and return it on each iteration.
+C: Right -- `.reduce()` is super flexible, but the **shape of the --ulator** entirely depends on the context and your starting value.
+You can use it to build arrays, objects, strings, numbers, whatever -- as long as you're consistent and return it on each iteration.
 
-T: Makes sense. So this is kind of like constructing a dictionary on the fly — just happens to be in a very "functional" style.
-C: Exactly — very Pythonic in concept, but wrapped in JS’s syntax and functional tooling.
+T: Makes sense. So this is kind of like constructing a dictionary on the fly -- just happens to be in a very "functional" style.
+C: Exactly -- very Pythonic in concept, but wrapped in JS’s syntax and functional tooling.
+*/
+
+// ========================================
+// Q10: Unique list -- Get unique countries
+// ========================================
+
+const countries = [...new Set(places.map(p => p.country))];
+console.log('Unique countries:', countries);
+
+/*
+-- My Notes --
+T: Whoa -- okay. This is an ultra-loaded one-liner.
+We’re pulling a bunch of things together in a single line. Let’s break it down.
+
+First: `places.map(p => p.country)` -- that makes sense. We’re just extracting the `country` property from each place object.
+That gives us an array of country names.
+
+C: Exactly. It might include duplicates, like `['France', 'USA', 'France']`.
+
+T: Then we pass that into `new Set(...)`. This gives us a set of **unique** values.
+Unlike in Python, we can’t just say `set(...)` -- we need to explicitly use the `Set` constructor.
+
+C: Yep -- in JavaScript, `Set` is a class, so we instantiate it with `new Set(...)`.
+
+T: And finally, the spread operator: `[...set]`. That turns the Set back into an array?
+Like, we’re doing a shallow copy of the values in the Set into a fresh array?
+
+C: Spot on. Sets in JS aren’t arrays -- they’re iterable, but not indexable like arrays.
+So if you want to use array methods afterward (like `.sort()` or `.map()`), you need to convert them back.
+
+T: So this line:
+```js
+const countries = [...new Set(places.map(p => p.country))];
+```
+is doing:
+1. Extract the country from each place
+
+2. Deduplicate them with a Set
+
+3. Convert that back to an array
+
+C: Nailed it. It’s a beautifully dense one-liner, and it’s surprisingly common in real-world JS when you want uniqueness.
+
+T: Kind of elegant, but definitely not intuitive the first time you see it. Especially that combination of new Set + spread.
+C: Yeah -- a lot of JS fluency is recognizing these “micro patterns”. Once you know them, they feel like magic.
+Until then? Totally opaque.
 */
