@@ -49,3 +49,52 @@ A good rule of thumb is: keep them single-line, side-effect free, and obvious.
 T: Makes sense. This case is okay. Still not a fan of the syntax, but I get it.
 
 */
+
+// ========================================
+// Q7: Optional chaining -- Get first event name or fallback
+// ========================================
+
+const firstEventName = trip.days?.[0]?.events?.[0] ?? 'Unknown';
+console.log('First event name:', firstEventName);
+
+/*
+-- My Notes --
+T: Okay, we’re trying to get the name of the first event on the first day.
+But the structure might not always be present -- maybe `trip.days` is undefined, or `events` doesn’t exist, etc.
+
+So we’re using that `?.` optional chaining operator. This lets you safely dig down without throwing errors.
+
+C: Exactly -- optional chaining lets you "poke" into a nested structure without worrying about `undefined` blowing up the chain.
+Each `?.` says: "If this exists, keep going; if not, just bail and return undefined."
+
+T: Right, so this prevents us from needing a whole mess of nested if-statements.
+But then we get to this thing: `??`. Double question mark. I *think* this is the nullish coalescing operator?
+
+C: You got it. It’s like a smarter version of `||` (logical OR) -- it **only falls back if the left-hand side is `null` or `undefined`.**
+That’s different from `||`, which will treat *falsy* values like `0`, `''`, or `false` as reasons to fall back too.
+
+T: Wait -- that’s kind of wild. So:
+```js
+0 || 'fallback'     // returns 'fallback'
+0 ?? 'fallback'     // returns 0
+```
+C: Exactly! That’s the difference. ?? is saying: "I only want to assign the fallback if I truly have nothing (null or undefined)."
+
+T: So this expression:
+```js
+trip.days?.[0]?.events?.[0] ?? 'Unknown'
+```
+means: if we get a valid string back from digging through all that, great. If we hit undefined or null anywhere, give me 'Unknown'.
+C: Nailed it.
+
+T: And from a syntax perspective, I guess we’re going deeper into this “symbolic language” now.
+First one question mark is a ternary. Then two question marks is... a null-coalescing assignment.
+It’s like we’re getting into question mark algebra.
+
+C: Haha, yes -- if ? is “maybe,” then ?? is “if not that, then give me something real.”
+It’s an intentional addition to make null-safety readable without verbosity.
+
+T: Makes sense. Still feels like this kind of stuff needs a primer the first time you see it.
+Like, "don’t panic, you’re not being hacked -- this is just modern JavaScript."
+C: Couldn’t have said it better.
+*/
