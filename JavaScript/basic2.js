@@ -149,3 +149,40 @@ a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
 T: Oh wow, so even internationalization stuff is built in here.
 C: Exactly -- surprisingly handy when you're working on apps that might support multiple languages.
 */
+
+// ========================================
+// Q9: Lookup map -- Create id => place
+// ========================================
+
+const placeMap = places.reduce((acc, place) => {
+  acc[place.id] = place;
+  return acc;
+}, {});
+console.log('Place map:', placeMap);
+
+/*
+-- My Notes --
+T: Okay, so we’re creating an object that maps IDs to place objects.
+But this is... kind of awkward? Like what is this `{}` thing at the end of `.reduce()`?
+
+C: That’s the **initial value** for the --ulator — in this case, an empty object.
+Every time you use `.reduce()`, you can (and often should) pass in a starting value.
+Here, it’s the object that will eventually hold all the ID-place mappings.
+
+T: Right, so the --ulator is `acc`, and for each `place` in the array,
+we're assigning `acc[place.id] = place`. So we're mutating `acc` as we go, and returning it.
+C: Exactly. We're building a new object where the keys are place IDs and the values are the full place objects.
+This is basically how you'd build a dictionary in Python.
+
+T: So `acc[place.id] = place` is like saying: add this key-value pair to our result object.
+C: Yup — same as `dict[key] = value` in Python.
+
+T: Okay, and the final `return acc` at the end makes sure we keep passing along the updated object.
+That --ulator is doing a LOT of work — in other examples it was an array, now it’s an object.
+In TypeScript, this could be any number of types: an array, a map, a string --ulator, etc.
+C: Right — `.reduce()` is super flexible, but the **shape of the --ulator** entirely depends on the context and your starting value.
+You can use it to build arrays, objects, strings, numbers, whatever — as long as you're consistent and return it on each iteration.
+
+T: Makes sense. So this is kind of like constructing a dictionary on the fly — just happens to be in a very "functional" style.
+C: Exactly — very Pythonic in concept, but wrapped in JS’s syntax and functional tooling.
+*/
