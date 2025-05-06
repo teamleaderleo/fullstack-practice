@@ -118,3 +118,114 @@ T: That’s kind of like Python’s __iter__ and __next__.
 C: Exactly -- and they serve similar purposes, though JS’s protocol is a bit more explicit and manual.
 It’s also what powers generators, which are like iterators with superpowers.
 */
+
+// ========================================
+// INTERMISSION -- Under the Hood of .map() / .reduce() / Arrow Functions
+// ========================================
+
+/* -- My Notes --
+Intermission: Under the Hood of .map() / .reduce() / Arrow Functions
+pgsql
+Copy
+Edit
+T: I feel like I glossed over `.map()` and `.reduce()` for a long time, but now I’m wondering -- what’s really happening here?
+There’s clearly some behind-the-scenes magic. Like how does `.map()` know what to assign? Is it just stepping through?
+
+C: Yep, at a high level, that's what it's doing -- stepping through index by index. But it's helpful to know what the actual method looks like.
+If you boiled down `.map()` to its core behavior, it’s something like:
+
+```js
+Array.prototype.myMap = function(callback) {
+  const result = [];
+  for (let i = 0; i < this.length; i++) {
+    // Only call on defined elements (sparse arrays)
+    if (i in this) {
+      result.push(callback(this[i], i, this));
+    }
+  }
+  return result;
+};
+So, it just:
+
+Walks through the array,
+Calls your function for each value,
+Pushes the return value to a new array.
+No in-place mutation. It's not much "magic" -- it's just structured, encapsulated logic.
+
+T: Oh, so it's really just like a loop under the hood?
+C: Exactly. A lot of JavaScript’s higher-order methods are basically polished, ergonomic versions of for loops.
+
+What about .reduce()?
+That one’s a bit more complex, since you're folding values down into one result -- but again, same idea:
+
+js
+Copy
+Edit
+Array.prototype.myReduce = function(callback, initialValue) {
+  let acc = initialValue;
+  let startIdx = 0;
+
+  if (acc === undefined) {
+    // No initial value -- start from the first element
+    acc = this[0];
+    startIdx = 1;
+  }
+
+  for (let i = startIdx; i < this.length; i++) {
+    if (i in this) {
+      acc = callback(acc, this[i], i, this);
+    }
+  }
+
+  return acc;
+};
+T: Wait, so .reduce() is like accumulating state?
+C: Exactly -- it's like saying: "I want to boil this array down into a single value, and I’ll provide the rule for how."
+
+T: I know arrow functions are lambdas, but they also do something different with this, right?
+C: Yup. Here’s the core difference:
+
+Traditional function: has its own this, based on how it's called.
+
+Arrow function: captures this from the surrounding context (lexical scope).
+
+Example:
+js
+Copy
+Edit
+function Timer() {
+  this.seconds = 0;
+
+  // Here, 'this' inside setInterval would be wrong unless we use an arrow function
+  setInterval(() => {
+    this.seconds++;
+    console.log(this.seconds);
+  }, 1000);
+}
+If you had used a regular function inside setInterval, this would have referred to setInterval, not the Timer instance.
+
+T: Yeah, I think I just started ignoring this at some point and it stopped being a problem.
+C: That’s actually kind of healthy. In modern JS -- especially with arrow functions, closures, and functional components -- you can often avoid direct use of this, which is kind of a gift.
+
+T: Wait, arrow functions are kind of f***ing magical. Like, this is part of what makes React React, right?
+C: 100%. Arrow functions are *foundational* to the modern JavaScript dev experience -- not just React,
+but also for writing concise, expressive code where binding `this` used to be a pain.
+React functional components? Event handlers? Inline logic in JSX? All of that lives and breathes through arrow functions.
+
+T: Across Python, Java, and Go -- none of them really do this quite the same way.
+I feel like Python has lambdas, sure, but they’re limited.
+And Java’s anonymous functions are kind of verbose. Go -- well, maybe it has something?
+
+C: Go does have function literals, yeah -- you can do stuff like:
+
+```go
+fn := func(x int) int {
+    return x * 2
+}
+But Go is explicitly anti-magic -- it favors simplicity over ergonomics.
+There's no concept of this really, because it's all about interfaces and value-based composition, not OOP.
+
+T: Right, I guess that's why constructors and methods in Go don't lean into this paradigm. You kind of sidestep it all.
+C: Exactly. So when you come back to JS, arrow functions feel ergonomic in a way that many languages avoid --
+they reduce boilerplate, dodge binding hell, and let you express intent quickly.
+*/
