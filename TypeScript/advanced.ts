@@ -173,6 +173,55 @@ console.log('Active users:', getActiveUserNamesSorted(users));
 
 /*
 -- My Notes --
-T:
-C:
+T: Okay, so… we're receiving an array of user objects,
+returning names of active users, sorted by age.
+
+C: Yep. Straightforward data pipeline: filter → sort → map.
+
+T: Right, so we’re already given the user types here.
+So there’s no ugly inlined thing, and it just looks a lot more comfortable.
+
+C: Exactly. The cleaner separation of structure and behavior helps with readability.
+
+T: Yeah, like, heck, man. Inline types are just so ugly.
+But I guess there’s that question:
+do you want to define a type for everything?
+
+C: That’s the tension -- sometimes defining a type feels heavy-handed,
+but it really helps once you start reusing or debugging it.
+
+T: I feel like you kind of do,
+but every now and then you kind of don’t.
+At the same time, it pays dividends when you’re actually looking
+at the function itself rather than just the function headers.
+
+C: Yup -- well put. The more you work with the function,
+the more value you get from a well-named, well-scoped type.
+
+T: But oh well, I guess.
+It’s all just trade-offs -- trying to shrink down
+how much memory bandwidth you need in your internal brain state.
+
+C: Exactly. Types are scaffolding for your mental RAM.
+
+T: Alright, so -- filtering, then sorting.
+And then, right… why is there a map after this?
+
+So you’ve sorted the thing after filtering them.
+But then the map part -- I don’t know --
+did we just mutate something?
+
+C: Good catch. No mutation here.
+.filter() creates a new array of only the active users,
+.sort() mutates that new array (not the original one),
+and then .map() just transforms each object into a string (the name).
+
+T: Ah, so it's pure all the way through -- even with the .sort()?
+That doesn’t feel obvious.
+
+C: Yeah, that’s the catch -- .sort() does mutate in place.
+But because you’re already working on the filtered result (a new array),
+you’re not touching the original input.
+
+If you needed strict purity, you’d .slice() before sorting.
 */
