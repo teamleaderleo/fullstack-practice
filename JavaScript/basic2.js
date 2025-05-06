@@ -98,3 +98,54 @@ T: Makes sense. Still feels like this kind of stuff needs a primer the first tim
 Like, "don’t panic, you’re not being hacked -- this is just modern JavaScript."
 C: Couldn’t have said it better.
 */
+
+// ========================================
+// Q8: Sort -- Sort places alphabetically
+// ========================================
+
+const sortedPlaces = [...places].sort((a, b) =>
+  a.name.localeCompare(b.name)
+);
+console.log('Sorted places:', sortedPlaces);
+
+/*
+-- My Notes --
+T: Okay, so we’re sorting places alphabetically by name. But wait -- what’s going on with that `...places` thing?
+I thought the ellipsis (`...`) was just for unpacking?
+
+C: Good catch. You're right -- `...` is the **spread operator**, and you're seeing it used here to **clone the original array**.
+We’re creating a shallow copy of `places` so the original isn’t mutated by `.sort()`.
+
+T: Oh, so `.sort()` mutates the original array?
+
+C: Yes -- and that's often a footgun. `.sort()` is **in-place**, so we use `[...places]` to avoid mutating shared state.
+This is especially important in functional or React code where you want to preserve immutability.
+
+T: Got it. So the spread operator is also used to *copy* arrays (or objects, depending on context), not just to unpack into arguments or function calls.
+
+C: Exactly -- it’s very flexible. It's one of those syntax elements that behaves a little differently depending on context.
+
+T: Now, this sorting function: `a.name.localeCompare(b.name)` -- what’s that about?
+Why not just compare `a.name < b.name` or something?
+
+C: So `localeCompare()` is a built-in string method that compares two strings according to **Unicode-aware locale rules**.
+It returns:
+- `-1` if `a.name` comes before `b.name`
+- `0` if they’re equal
+- `1` if `a.name` comes after `b.name`
+
+That matches exactly what `.sort()` expects: a function returning negative, zero, or positive.
+T: Interesting. In Python, I feel like strings just sort naturally -- or you can do `sorted(list, key=lambda x: x["name"])` and it works fine.
+
+C: Right -- Python’s sort is very intuitive and leans on Unicode ordering behind the scenes, too.
+But if you want locale-aware behavior (like accents, special characters, etc.), you’d need to use the `locale` module.
+T: I’ve never really written my own string sorting function in JavaScript before -- this feels like a very "safe default" way to do it.
+
+C: That’s a good way to put it. You can use `localeCompare()` for almost all string sorting unless you *need* something more custom.
+Bonus: it even accepts options if you want case-insensitive or language-specific behavior:
+```js
+a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
+```
+T: Oh wow, so even internationalization stuff is built in here.
+C: Exactly -- surprisingly handy when you're working on apps that might support multiple languages.
+*/
