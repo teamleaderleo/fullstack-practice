@@ -279,3 +279,56 @@ C: That’s the eternal tension between flexibility and safety -- TypeScript giv
 but pure JS lets you move fast. You’ll pick the tool depending on context, especially in companies where 
 data shape consistency is everything.
 */
+
+// ========================================
+// Q4: Group by country
+// ========================================
+
+const grouped = places.reduce((acc, place) => {
+  if (!acc[place.country]) acc[place.country] = [];
+  acc[place.country].push(place);
+  return acc;
+}, {});
+console.log('Grouped by country:', grouped);
+
+/*
+-- My Notes --
+T: Okay, so we’re using `.reduce()` again -- but now it’s more complicated.
+This time we’re grouping places by country.
+
+So, are the parameters here like a tuple? Like the accumulator and the item?
+I guess they’re just parameters we name -- it’s not that JavaScript gives us a "tuple" or anything.
+We’re just destructuring the data flow from `.reduce()`?
+
+C: Exactly. In `.reduce((acc, item) => {}, initialValue)`, you're naming two parameters:
+- `acc`: the accumulator that you’re building up.
+- `item`: the current element in the array. No tuple or special structure -- it’s just parameter order.
+
+T: So in this case, `acc` is the grouping object, and `place` is each place object in the array. 
+We’re checking if `acc[place.country]` exists, and if not, we initialize it as an empty array.
+
+C: Right -- this is basically a classic "group by" operation in imperative style.
+You create an object where each key is a country, and the value is an array of places in that country.
+
+T: `.push()` here is doing the same thing as `append()` in Python, right?
+C: Exactly. `.push(item)` appends to the end of a JS array. Same as Python's `list.append()`.
+
+T: And then we always return `acc` at the end because reduce needs to carry that forward, yeah?
+C: Yep -- if you forget to return `acc`, everything breaks. It’s like passing the baton in a relay race.
+
+T: So I guess this isn’t flattening -- it’s grouping. Just visually, it kind of looks like it’s flattening into nested arrays.
+C: Good instinct -- but yeah, it’s grouping. You’re creating a **structure of arrays**, not collapsing one.
+
+T: Honestly, this feels a little awkward and not super readable. Isn’t there a more intuitive way?
+C: Totally fair. This is a common critique of `.reduce()` for grouping. It’s powerful but not expressive.
+In practice, a helper like Lodash's `_.groupBy` makes it *much* cleaner:
+
+```js
+import _ from 'lodash';
+const grouped = _.groupBy(places, 'country');
+```
+One line. Very clear. But if you’re avoiding dependencies, this reduce pattern is the go-to.
+T: Makes sense. Maybe it's just about familiarity -- this is readable once you’ve seen it a few times, but it’s not beginner-friendly.
+
+C: That’s exactly right. Once your mental model clicks, this becomes a kind of muscle memory -- but the first few times? Yeah, totally awkward.
+*/
