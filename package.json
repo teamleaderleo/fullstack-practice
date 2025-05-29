@@ -1,17 +1,29 @@
 {
-  "name": "fullstack-cheatsheet",
-  "version": "1.0.0",
-  "description": "some stuff",
-  "main": "index.js",
+  "name": "fullstack-practice",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "run:first": "node JavaScript/first.js",
-    "run:basic": "node JavaScript/basic.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
   "devDependencies": {
-    "@types/node": "^22.15.14"
+    "@eslint/js": "^9.25.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5"
   }
 }
