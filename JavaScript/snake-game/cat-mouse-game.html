@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Mouse Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        #gameGrid {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            grid-template-rows: repeat(8, 50px);
+            gap: 2px;
+            border: 2px solid #333;
+            background: #f0f0f0;
+            margin: 20px;
+        }
+        
+        .cell {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        #catchCounter {
+            font-size: 24px;
+            margin: 10px;
+            color: #2c5aa0;
+        }
+        
+        #instructions {
+            text-align: center;
+            margin: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐱 Cat Mouse Game</h1>
+    <div id="catchCounter">Catches: 0</div>
+    <div id="gameGrid"></div>
+    <div id="instructions">
+        Use arrow keys to move the cat to catch the mouse!
+    </div>
+
+    <script>
+        // Game state - just two positions and a counter!
+        let cat = {x: 2, y: 2};
+        let mouse = {x: 5, y: 5};
+        let catches = 0;
+        const gridSize = 8;
+        
+        // Get DOM elements
+        const grid = document.getElementById('gameGrid');
+        const catchCounter = document.getElementById('catchCounter');
+        
+        // Create the grid cells
+        function createGrid() {
+            grid.innerHTML = ''; // Clear existing
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.id = `cell-${i}`;
+                grid.appendChild(cell);
+            }
+        }
+        
+        // Convert x,y coordinates to cell index
+        function getIndex(x, y) {
+            return y * gridSize + x;
+        }
+        
+        // Draw cat and mouse on the grid
+        function draw() {
+            // Clear all cells first
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                document.getElementById(`cell-${i}`).textContent = '';
+            }
+            
+            // Place cat
+            const catIndex = getIndex(cat.x, cat.y);
+            document.getElementById(`cell-${catIndex}`).textContent = '🐱';
+            
+            // Place mouse
+            const mouseIndex = getIndex(mouse.x, mouse.y);
+            document.getElementById(`cell-${mouseIndex}`).textContent = '🐭';
+        }
+        
+        // Generate random positions
+        function randomizePositions() {
+            cat.x = Math.floor(Math.random() * gridSize);
+            cat.y = Math.floor(Math.random() * gridSize);
+            
+            // Make sure mouse doesn't spawn on cat
+            do {
+                mouse.x = Math.floor(Math.random() * gridSize);
+                mouse.y = Math.floor(Math.random() * gridSize);
+            } while (mouse.x === cat.x && mouse.y === cat.y);
+        }
+        
+        // Check if cat caught the mouse
+        function checkCatch() {
+            if (cat.x === mouse.x && cat.y === mouse.y) {
+                catches++;
+                catchCounter.textContent = `Catches: ${catches}`;
+                randomizePositions();
+                draw();
+            }
+        }
+        
+        // Handle keyboard input
+        document.addEventListener('keydown', (e) => {
+            // Store old position for boundary checking
+            const oldX = cat.x;
+            const oldY = cat.y;
+            
+            // Move cat based on arrow key
+            if (e.key === 'ArrowUp' && cat.y > 0) {
+                cat.y--;
+            } else if (e.key === 'ArrowDown' && cat.y < gridSize - 1) {
+                cat.y++;
+            } else if (e.key === 'ArrowLeft' && cat.x > 0) {
+                cat.x--;
+            } else if (e.key === 'ArrowRight' && cat.x < gridSize - 1) {
+                cat.x++;
+            }
+            
+            // Only redraw and check catch if cat actually moved
+            if (cat.x !== oldX || cat.y !== oldY) {
+                draw();
+                checkCatch();
+            }
+        });
+        
+        // Initialize the game
+        createGrid();
+        draw();
+    </script>
+</body>
+</html>
