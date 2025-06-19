@@ -32,13 +32,16 @@
     </style>
 </head>
 <body>
+    <!-- Step 1: plan stuff out -->
     <h1>Snake Game</h1>
+    <!-- Step 2: HTML Scaffold-->
     <div id="score">Score: 0</div>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <canvas id="gameCanvas" width="400" height="400"></canvas> 
     <div id="gameOver">Game Over! Press R to restart</div>
     <p>Use arrow keys to move</p>
 
     <script>
+      // Step 3: JavaScript code
         // Game setup
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
