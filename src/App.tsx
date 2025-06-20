@@ -1,11 +1,12 @@
-import PostsList from './components/PostsList';
+// import PostsList from './components/PostsList';
+import TicTacToe from './components/TicTacToe';
 
 function App() {
 
   return (
     <>
       <div>
-        <PostsList />
+        <TicTacToe />
         <h1>Hello world</h1>
       </div>
     </>
